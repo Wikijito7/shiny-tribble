@@ -20,7 +20,7 @@ shiny-tribble is a server used to save and get info from ESP32 clients that uses
 - Lastly, you can download last version of the project, check it out on [here](https://github.com/Wikijito7/shiny-tribble/releases).
 
 ## How it works
-shiny-tribble is a base project made to be used on other projects for Wokis network. It has already user related routing and ready to use.
+shiny-tribble is a server used to save and get info from ESP32 clients that uses this server as their backup. It has already user related routing and ready to use.
 
 You may configure some stuff on `app.conf` file. You can check it out [here](https://github.com/Wikijito7/shiny-tribble/blob/master/src/main/resources/app.conf).
 

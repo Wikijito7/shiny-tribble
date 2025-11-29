@@ -2,6 +2,7 @@ package es.wokis.data.dbo.user
 
 import es.wokis.data.constants.ServerConstants
 import es.wokis.data.constants.ServerConstants.DEFAULT_LANG
+import es.wokis.data.dbo.sensor.SensorsDataDBO
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import org.bson.types.ObjectId
@@ -19,5 +20,6 @@ data class UserDBO(
     val emailVerified: Boolean = false,
     val totpEncodedSecret: ByteArray? = null,
     val sessions: List<String> = emptyList(),
-    val recoverWords: List<String> = emptyList()
+    val recoverWords: List<String> = emptyList(),
+    val sensors: SensorsDataDBO? = null
 )

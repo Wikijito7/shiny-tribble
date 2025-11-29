@@ -1,12 +1,12 @@
 package es.wokis.di
 
 import es.wokis.data.database.AppDataBase
-import es.wokis.data.datasource.recover.RecoverLocalDataSource
-import es.wokis.data.datasource.recover.RecoverLocalDataSourceImpl
+import es.wokis.data.datasource.local.recover.RecoverLocalDataSource
+import es.wokis.data.datasource.local.recover.RecoverLocalDataSourceImpl
 import es.wokis.data.datasource.local.verify.VerifyLocalDataSource
 import es.wokis.data.datasource.local.verify.VerifyLocalDataSourceImpl
-import es.wokis.data.datasource.user.UserLocalDataSource
-import es.wokis.data.datasource.user.UserLocalDataSourceImpl
+import es.wokis.data.datasource.local.user.UserLocalDataSource
+import es.wokis.data.datasource.local.user.UserLocalDataSourceImpl
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
