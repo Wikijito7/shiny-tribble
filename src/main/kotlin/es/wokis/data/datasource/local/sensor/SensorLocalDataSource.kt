@@ -2,38 +2,35 @@ package es.wokis.data.datasource.local.sensor
 
 import com.mongodb.client.model.Filters
 import com.mongodb.kotlin.client.coroutine.MongoCollection
-import es.wokis.data.bo.sensor.SensorDataBO
+import es.wokis.data.bo.sensor.SensorBO
 import es.wokis.data.bo.sensor.SensorsDataBO
 import es.wokis.data.bo.user.UserBO
-import es.wokis.data.dbo.sensor.SensorsDataDBO
-import es.wokis.data.dbo.user.UserDBO
+import es.wokis.data.dbo.sensor.SensorDBO
 import es.wokis.data.mapper.sensor.toDBO
-import es.wokis.data.mapper.user.toDBO
-import org.bson.types.ObjectId
+import kotlinx.coroutines.flow.firstOrNull
 
 interface SensorLocalDataSource {
-    suspend fun addSensorData(user: UserBO, data: SensorDataBO): Boolean
+    suspend fun addSensorData(user: UserBO, sensor: SensorBO): Boolean
     fun getLastSensorData(user: UserBO): SensorsDataBO
     fun getAllSensorData(user: UserBO): SensorsDataBO
     fun getHistoricSensorData(user: UserBO, time: String, interval: String): SensorsDataBO
 }
 
 class SensorLocalDataSourceImpl(
-    private val userCollection: MongoCollection<UserDBO>
+    private val sensorCollection: MongoCollection<SensorDBO>
 ) : SensorLocalDataSource {
 
-    override suspend fun addSensorData(user: UserBO, data: SensorDataBO): Boolean {
-        val filter = Filters.eq(UserDBO::id.name, ObjectId(user.id))
-        val updatedUser = user.toDBO().let { userDBO ->
-            val sensors = userDBO.sensors?.let {
-                val updatedSensors = it.sensors.toMutableList().apply {
-                    add(data.toDBO())
+    override suspend fun addSensorData(user: UserBO, sensor: SensorBO): Boolean {
+        val filter = Filters.eq(SensorDBO::name.name, sensor.name)
+        val sensorDBO = sensorCollection.find<SensorDBO>(filter = filter).firstOrNull()?.let {
+            it.copy(
+                data = it.data.toMutableList().apply {
+                    sensor.data.firstOrNull()?.toDBO()?.let { element -> add(element) }
                 }.toList()
-                it.copy(sensors = updatedSensors)
-            } ?: SensorsDataDBO(listOf(data.toDBO()))
-            userDBO.copy(sensors = sensors)
-        }
-        return userCollection.replaceOne(filter, updatedUser).wasAcknowledged()
+            )
+        } ?: sensor.toDBO(user.id ?: return false)
+
+        return sensorCollection.replaceOne(filter, sensorDBO).wasAcknowledged()
     }
 
     override fun getLastSensorData(user: UserBO): SensorsDataBO {

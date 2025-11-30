@@ -1,44 +1,87 @@
 package es.wokis.data.mapper.sensor
 
 import es.wokis.data.bo.sensor.SensorBatteryBO
+import es.wokis.data.bo.sensor.SensorBO
 import es.wokis.data.bo.sensor.SensorDataBO
 import es.wokis.data.bo.sensor.SensorsDataBO
 import es.wokis.data.dbo.sensor.SensorBatteryDBO
+import es.wokis.data.dbo.sensor.SensorDBO
 import es.wokis.data.dbo.sensor.SensorDataDBO
-import es.wokis.data.dbo.sensor.SensorsDataDBO
 import es.wokis.data.dto.sensor.SensorBatteryDTO
+import es.wokis.data.dto.sensor.SensorDTO
 import es.wokis.data.dto.sensor.SensorDataDTO
 import es.wokis.data.dto.sensor.SensorsDataDTO
+import es.wokis.data.dto.sensor.SimpleSensorDataDTO
+import es.wokis.data.dto.sensor.SimpleSensorsDataDTO
 
-fun SensorsDataDTO.toBO() = SensorsDataBO(
+fun List<SensorDBO>.toBOList() = map { it.toBO() }
+fun List<SensorBO>.toDBOList(userId: String) = map { it.toDBO(userId) }
+
+fun SensorsDataBO.toSimpleDTO() = SimpleSensorsDataDTO(
+    sensors = sensors.map { it.toSimpleDTO() }
+)
+
+fun SensorBO.toSimpleDTO() = SimpleSensorDataDTO(
+    name = name,
+    temp = data.lastOrNull()?.temp,
+    hum = data.lastOrNull()?.hum,
+    timestamp = data.lastOrNull()?.timestamp,
+    error = data.lastOrNull()?.error,
+    battery = data.lastOrNull()?.battery?.toDTO()
+)
+
+fun SimpleSensorsDataDTO.toBO() = SensorsDataBO(
     sensors = sensors.map { it.toBO() }
 )
 
-fun SensorDataDTO.toBO() = SensorDataBO(
+fun SimpleSensorDataDTO.toBO() = SensorBO(
     name = name,
-    timestamp = timestamp ?: System.currentTimeMillis(),
-    temp = temp,
-    hum = hum,
-    error = error,
-    battery = battery?.toBO()
-)
-
-fun SensorBatteryDTO.toBO() = SensorBatteryBO(
-    isCharging = isCharging,
-    percentage = percentage
+    timestamp = timestamp ?: 0L,
+    data = listOf(
+        SensorDataBO(
+            temp = temp,
+            hum = hum,
+            timestamp = timestamp ?: 0L,
+            error = error,
+            battery = battery?.toBO()
+        )
+    )
 )
 
 fun SensorsDataBO.toDTO() = SensorsDataDTO(
     sensors = sensors.map { it.toDTO() }
 )
 
-fun SensorDataBO.toDTO() = SensorDataDTO(
+fun SensorsDataDTO.toBO() = SensorsDataBO(
+    sensors = sensors.map { it.toBO() }
+)
+
+fun SensorBO.toDTO() = SensorDTO(
     name = name,
     timestamp = timestamp,
+    data = data.map { it.toDTO() }
+)
+
+fun SensorDTO.toBO() = SensorBO(
+    name = name,
+    timestamp = timestamp ?: (data.maxOfOrNull { it.timestamp } ?: 0L),
+    data = data.map { it.toBO() }
+)
+
+fun SensorDataBO.toDTO() = SensorDataDTO(
     temp = temp,
     hum = hum,
+    timestamp = timestamp,
     error = error,
     battery = battery?.toDTO()
+)
+
+fun SensorDataDTO.toBO() = SensorDataBO(
+    temp = temp,
+    hum = hum,
+    timestamp = timestamp,
+    error = error,
+    battery = battery?.toBO()
 )
 
 fun SensorBatteryBO.toDTO() = SensorBatteryDTO(
@@ -46,35 +89,37 @@ fun SensorBatteryBO.toDTO() = SensorBatteryDTO(
     percentage = percentage
 )
 
-fun SensorsDataBO.toDBO() = SensorsDataDBO(
-    sensors = sensors.map { it.toDBO() }
-)
-
-fun SensorDataBO.toDBO() = SensorDataDBO(
-    name = name,
-    timestamp = timestamp,
-    temp = temp,
-    hum = hum,
-    error = error,
-    battery = battery?.toDBO()
-)
-
-fun SensorBatteryBO.toDBO() = SensorBatteryDBO(
+fun SensorBatteryDTO.toBO() = SensorBatteryBO(
     isCharging = isCharging,
     percentage = percentage
 )
 
-fun SensorsDataDBO.toBO() = SensorsDataBO(
-    sensors = sensors.map { it.toBO() }
+fun SensorDBO.toBO() = SensorBO(
+    name = name,
+    timestamp = data.maxOfOrNull { it.timestamp } ?: 0L,
+    data = data.map { it.toBO() }
+)
+
+fun SensorBO.toDBO(userId: String) = SensorDBO(
+    name = name,
+    data = data.map { it.toDBO() },
+    userId = userId
 )
 
 fun SensorDataDBO.toBO() = SensorDataBO(
-    name = name,
-    timestamp = timestamp,
     temp = temp,
     hum = hum,
+    timestamp = timestamp,
     error = error,
     battery = battery?.toBO()
+)
+
+fun SensorDataBO.toDBO() = SensorDataDBO(
+    temp = temp,
+    hum = hum,
+    timestamp = timestamp,
+    error = error,
+    battery = battery?.toDBO()
 )
 
 fun SensorBatteryDBO.toBO() = SensorBatteryBO(
@@ -82,3 +127,7 @@ fun SensorBatteryDBO.toBO() = SensorBatteryBO(
     percentage = percentage
 )
 
+fun SensorBatteryBO.toDBO() = SensorBatteryDBO(
+    isCharging = isCharging,
+    percentage = percentage
+)
