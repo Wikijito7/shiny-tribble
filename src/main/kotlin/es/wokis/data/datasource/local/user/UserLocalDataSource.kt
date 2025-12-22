@@ -65,6 +65,7 @@ class UserLocalDataSourceImpl(private val userCollection: MongoCollection<UserDB
     }
 
     override suspend fun updateUser(user: UserBO): Boolean {
+        println("user.id: ${user.id}")
         val filter = Filters.eq(UserDBO::id.name, ObjectId(user.id))
         return userCollection.replaceOne(filter, user.toDBO()).wasAcknowledged()
     }

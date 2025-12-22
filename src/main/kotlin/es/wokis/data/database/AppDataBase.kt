@@ -30,6 +30,7 @@ class AppDataBase {
     val usersCollection by lazy { database.getCollection<UserDBO>("users") }
     val verificationCollection by lazy { database.getCollection<VerificationDBO>("verification") }
     val recoverCollection by lazy { database.getCollection<RecoverDBO>("recover") }
+    val sensorsCollection by lazy { database.getCollection<RecoverDBO>("sensors") }
 
     companion object {
         private const val MONGODB_PREFIX = "mongodb://"

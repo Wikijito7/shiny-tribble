@@ -6,14 +6,16 @@ import es.wokis.data.bo.sensor.SensorBO
 import es.wokis.data.bo.sensor.SensorsDataBO
 import es.wokis.data.bo.user.UserBO
 import es.wokis.data.dbo.sensor.SensorDBO
+import es.wokis.data.mapper.sensor.toBOList
 import es.wokis.data.mapper.sensor.toDBO
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.toList
 
 interface SensorLocalDataSource {
     suspend fun addSensorData(user: UserBO, sensor: SensorBO): Boolean
-    fun getLastSensorData(user: UserBO): SensorsDataBO
-    fun getAllSensorData(user: UserBO): SensorsDataBO
-    fun getHistoricSensorData(user: UserBO, time: String, interval: String): SensorsDataBO
+    suspend fun getLastSensorData(user: UserBO): SensorsDataBO
+    suspend fun getAllSensorData(user: UserBO): SensorsDataBO
+    suspend fun getHistoricSensorData(user: UserBO, time: String, interval: String): SensorsDataBO
 }
 
 class SensorLocalDataSourceImpl(
@@ -33,15 +35,30 @@ class SensorLocalDataSourceImpl(
         return sensorCollection.replaceOne(filter, sensorDBO).wasAcknowledged()
     }
 
-    override fun getLastSensorData(user: UserBO): SensorsDataBO {
-        TODO("Not yet implemented")
+    override suspend fun getLastSensorData(user: UserBO): SensorsDataBO {
+        val filter = Filters.eq(SensorDBO::userId.name, user.id)
+        return sensorCollection
+            .find<SensorDBO>(filter = filter)
+            .toList()
+            .map { it.copy(data = listOfNotNull(it.data.lastOrNull())) }
+            .toBOList()
+            .let {
+                SensorsDataBO(sensors = it)
+            }
     }
 
-    override fun getAllSensorData(user: UserBO): SensorsDataBO {
-        TODO("Not yet implemented")
+    override suspend  fun getAllSensorData(user: UserBO): SensorsDataBO {
+        val filter = Filters.eq(SensorDBO::userId.name, user.id)
+        return sensorCollection
+            .find<SensorDBO>(filter = filter)
+            .toList()
+            .toBOList()
+            .let {
+                SensorsDataBO(sensors = it)
+            }
     }
 
-    override fun getHistoricSensorData(
+    override suspend  fun getHistoricSensorData(
         user: UserBO,
         time: String,
         interval: String
