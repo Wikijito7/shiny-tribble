@@ -8,6 +8,7 @@ import com.mongodb.client.model.Aggregates.unwind
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.Indexes.ascending
 import com.mongodb.kotlin.client.coroutine.MongoCollection
+import es.wokis.data.bo.response.AcknowledgeBO
 import es.wokis.data.bo.sensor.SensorBO
 import es.wokis.data.bo.sensor.SensorsDataBO
 import es.wokis.data.bo.user.UserBO
@@ -24,6 +25,10 @@ interface SensorLocalDataSource {
     suspend fun getLastSensorData(user: UserBO): SensorsDataBO
     suspend fun getAllSensorData(user: UserBO): SensorsDataBO
     suspend fun getHistoricSensorData(user: UserBO, time: String, interval: String): SensorsDataBO
+    suspend fun getSensorData(user: UserBO, sensorId: String): SensorBO
+    suspend fun updateSensorInfo(user: UserBO, sensorId: String, sensor: SensorBO): SensorBO
+    suspend fun removeSensor(user: UserBO, sensorId: String): AcknowledgeBO
+    suspend fun removeSensorDataLog(user: UserBO, sensorId: String, timestamp: String): AcknowledgeBO
 }
 
 class SensorLocalDataSourceImpl(
@@ -98,6 +103,36 @@ class SensorLocalDataSourceImpl(
         time: String,
         interval: String
     ): SensorsDataBO {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getSensorData(
+        user: UserBO,
+        sensorId: String
+    ): SensorBO {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun updateSensorInfo(
+        user: UserBO,
+        sensorId: String,
+        sensor: SensorBO
+    ): SensorBO {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun removeSensor(
+        user: UserBO,
+        sensorId: String
+    ): AcknowledgeBO {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun removeSensorDataLog(
+        user: UserBO,
+        sensorId: String,
+        timestamp: String
+    ): AcknowledgeBO {
         TODO("Not yet implemented")
     }
 

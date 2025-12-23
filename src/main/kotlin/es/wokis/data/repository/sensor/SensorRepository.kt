@@ -2,18 +2,19 @@ package es.wokis.data.repository.sensor
 
 import es.wokis.data.bo.response.AcknowledgeBO
 import es.wokis.data.bo.sensor.SensorBO
+import es.wokis.data.bo.sensor.SensorsDataBO
 import es.wokis.data.bo.user.UserBO
 import es.wokis.data.datasource.local.sensor.SensorLocalDataSource
-import es.wokis.data.dto.sensor.SensorsDataDTO
-import es.wokis.data.dto.sensor.SimpleSensorsDataDTO
-import es.wokis.data.mapper.sensor.toDTO
-import es.wokis.data.mapper.sensor.toSimpleDTO
 
 interface SensorRepository {
     suspend fun addData(user: UserBO, data: SensorBO): AcknowledgeBO
-    suspend fun getLastSensorData(user: UserBO): SimpleSensorsDataDTO
-    suspend fun getAllSensorData(user: UserBO): SensorsDataDTO
-    suspend fun getHistoricSensorData(user: UserBO, time: String, interval: String): SensorsDataDTO
+    suspend fun getLastSensorData(user: UserBO): SensorsDataBO
+    suspend fun getAllSensorData(user: UserBO): SensorsDataBO
+    suspend fun getHistoricSensorData(user: UserBO, time: String, interval: String): SensorsDataBO
+    suspend fun getSensorData(user: UserBO, sensorId: String): SensorBO
+    suspend fun updateSensorInfo(user: UserBO, sensorId: String, sensor: SensorBO): SensorBO
+    suspend fun removeSensor(user: UserBO, sensorId: String): AcknowledgeBO
+    suspend fun removeSensorDataLog(user: UserBO, sensorId: String, timestamp: String): AcknowledgeBO
 }
 
 class SensorRepositoryImpl(
@@ -23,17 +24,38 @@ class SensorRepositoryImpl(
         return AcknowledgeBO(sensorLocalDataSource.addSensorData(user = user, sensor = data))
     }
 
-    override suspend fun getLastSensorData(user: UserBO): SimpleSensorsDataDTO =
-        sensorLocalDataSource.getLastSensorData(user = user).toSimpleDTO()
+    override suspend fun getLastSensorData(user: UserBO): SensorsDataBO =
+        sensorLocalDataSource.getLastSensorData(user = user)
 
-    override suspend fun getAllSensorData(user: UserBO): SensorsDataDTO =
-        sensorLocalDataSource.getAllSensorData(user = user).toDTO()
+    override suspend fun getAllSensorData(user: UserBO): SensorsDataBO =
+        sensorLocalDataSource.getAllSensorData(user = user)
 
     override suspend fun getHistoricSensorData(
         user: UserBO,
         time: String,
         interval: String
-    ): SensorsDataDTO =
-        sensorLocalDataSource.getHistoricSensorData(user = user, time = time, interval = interval).toDTO()
+    ): SensorsDataBO =
+        sensorLocalDataSource.getHistoricSensorData(user = user, time = time, interval = interval)
 
+    override suspend fun getSensorData(
+        user: UserBO,
+        sensorId: String
+    ): SensorBO = sensorLocalDataSource.getSensorData(user, sensorId)
+
+    override suspend fun updateSensorInfo(
+        user: UserBO,
+        sensorId: String,
+        sensor: SensorBO
+    ): SensorBO = sensorLocalDataSource.updateSensorInfo(user, sensorId, sensor)
+
+    override suspend fun removeSensor(
+        user: UserBO,
+        sensorId: String
+    ): AcknowledgeBO = sensorLocalDataSource.removeSensor(user, sensorId)
+
+    override suspend fun removeSensorDataLog(
+        user: UserBO,
+        sensorId: String,
+        timestamp: String
+    ): AcknowledgeBO = sensorLocalDataSource.removeSensorDataLog(user, sensorId, timestamp)
 }
