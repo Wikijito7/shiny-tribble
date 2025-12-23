@@ -60,7 +60,7 @@ fun UserBO.toDBO() = UserDBO(
 fun List<UserDBO>.toBO() = this.map { it.toBO() }
 
 fun UserDBO.toBO() = UserBO(
-    id = id?.toString(),
+    id = id?.toHexString(),
     username = username,
     email = email,
     password = password,
@@ -71,10 +71,7 @@ fun UserDBO.toBO() = UserBO(
     createdOn = createdOn,
     emailVerified = emailVerified,
     recoverWords = recoverWords
-).also {
-    println("userdbo, $this")
-    println("userbo, $it")
-}
+)
 
 fun List<UserBO>?.toDTO() = this?.map { it.toDTO() }.orEmpty()
 

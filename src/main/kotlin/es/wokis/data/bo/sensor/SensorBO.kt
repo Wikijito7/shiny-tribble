@@ -6,7 +6,6 @@ data class SensorsDataBO(
 
 data class SensorBO(
     val name: String,
-    val timestamp: Long,
     val data: List<SensorDataBO>
 )
 

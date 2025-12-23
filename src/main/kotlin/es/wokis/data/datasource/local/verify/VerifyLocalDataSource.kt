@@ -3,6 +3,7 @@ package es.wokis.data.datasource.local.verify
 import com.mongodb.client.model.Filters
 import com.mongodb.kotlin.client.coroutine.MongoCollection
 import es.wokis.data.bo.verification.VerificationBO
+import es.wokis.data.constants.ServerConstants
 import es.wokis.data.dbo.verification.VerificationDBO
 import es.wokis.data.mapper.verify.toBO
 import es.wokis.data.mapper.verify.toDBO
@@ -31,7 +32,7 @@ class VerifyLocalDataSourceImpl(private val verificationCollection: MongoCollect
     }
 
     override suspend fun removeVerification(id: String): Boolean = try {
-        verificationCollection.deleteOne(Filters.eq(VerificationDBO::id.name, ObjectId(id))).wasAcknowledged()
+        verificationCollection.deleteOne(Filters.eq(ServerConstants.MONGO_DOCUMENT_ID, ObjectId(id))).wasAcknowledged()
 
     } catch (e: Throwable) {
         println(e.stackTraceToString())

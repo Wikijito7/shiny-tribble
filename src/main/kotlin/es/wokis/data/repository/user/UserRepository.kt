@@ -121,6 +121,7 @@ class UserRepositoryImpl(
     }
 
     override suspend fun updateUserAvatar(user: UserBO, avatarUrl: String) = updateUser(user.copy(image = avatarUrl))
+
     override suspend fun saveTOTPEncodedSecret(
         user: UserBO,
         encodedSecret: ByteArray,

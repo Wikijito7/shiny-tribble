@@ -36,12 +36,11 @@ fun SimpleSensorsDataDTO.toBO() = SensorsDataBO(
 
 fun SimpleSensorDataDTO.toBO() = SensorBO(
     name = name,
-    timestamp = timestamp ?: 0L,
     data = listOf(
         SensorDataBO(
             temp = temp,
             hum = hum,
-            timestamp = timestamp ?: 0L,
+            timestamp = timestamp ?: System.currentTimeMillis(),
             error = error,
             battery = battery?.toBO()
         )
@@ -58,13 +57,11 @@ fun SensorsDataDTO.toBO() = SensorsDataBO(
 
 fun SensorBO.toDTO() = SensorDTO(
     name = name,
-    timestamp = timestamp,
     data = data.map { it.toDTO() }
 )
 
 fun SensorDTO.toBO() = SensorBO(
     name = name,
-    timestamp = timestamp ?: (data.maxOfOrNull { it.timestamp } ?: 0L),
     data = data.map { it.toBO() }
 )
 
@@ -96,7 +93,6 @@ fun SensorBatteryDTO.toBO() = SensorBatteryBO(
 
 fun SensorDBO.toBO() = SensorBO(
     name = name,
-    timestamp = data.maxOfOrNull { it.timestamp } ?: 0L,
     data = data.map { it.toBO() }
 )
 

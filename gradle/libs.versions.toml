@@ -51,6 +51,7 @@ slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
 
 # MongoDB
 mongobd = { module = "org.mongodb:mongodb-driver-kotlin-coroutine", version.ref = "mongodb"}
+mongobd-bson-kotlinx = { module = "org.mongodb:bson-kotlinx", version.ref = "mongodb" }
 
 # Koin
 koin-ktor = { module = "io.insert-koin:koin-ktor3", version.ref = "koin" }

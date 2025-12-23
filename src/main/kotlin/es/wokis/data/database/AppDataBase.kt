@@ -6,6 +6,7 @@ import com.mongodb.MongoCredential
 import com.mongodb.kotlin.client.coroutine.MongoClient
 import com.mongodb.kotlin.client.coroutine.MongoDatabase
 import es.wokis.data.dbo.recover.RecoverDBO
+import es.wokis.data.dbo.sensor.SensorDBO
 import es.wokis.data.dbo.user.UserDBO
 import es.wokis.data.dbo.verification.VerificationDBO
 import es.wokis.plugins.config
@@ -30,7 +31,7 @@ class AppDataBase {
     val usersCollection by lazy { database.getCollection<UserDBO>("users") }
     val verificationCollection by lazy { database.getCollection<VerificationDBO>("verification") }
     val recoverCollection by lazy { database.getCollection<RecoverDBO>("recover") }
-    val sensorsCollection by lazy { database.getCollection<RecoverDBO>("sensors") }
+    val sensorsCollection by lazy { database.getCollection<SensorDBO>("sensors") }
 
     companion object {
         private const val MONGODB_PREFIX = "mongodb://"

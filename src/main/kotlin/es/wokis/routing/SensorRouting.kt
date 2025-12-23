@@ -1,6 +1,9 @@
 package es.wokis.routing
 
 import es.wokis.data.dto.sensor.SensorDTO
+import es.wokis.data.dto.sensor.SensorDataDTO
+import es.wokis.data.dto.sensor.SimpleSensorDataDTO
+import es.wokis.data.mapper.acknowledge.toDTO
 import es.wokis.data.mapper.sensor.toBO
 import es.wokis.data.repository.sensor.SensorRepository
 import es.wokis.utils.user
@@ -34,7 +37,16 @@ fun Routing.setUpSensorRouting() {
                     call.user?.let { user ->
                         val data = call.receive<SensorDTO>()
                         sensorRepository.addData(user = user, data = data.toBO()).let {
-                            call.respond(status = HttpStatusCode.OK, message = it)
+                            call.respond(status = HttpStatusCode.OK, message = it.toDTO())
+                        }
+                    } ?: call.respond(HttpStatusCode.BadRequest)
+                }
+
+                post("/simple") {
+                    call.user?.let { user ->
+                        val data = call.receive<SimpleSensorDataDTO>()
+                        sensorRepository.addData(user = user, data = data.toBO()).let {
+                            call.respond(status = HttpStatusCode.OK, message = it.toDTO())
                         }
                     } ?: call.respond(HttpStatusCode.BadRequest)
                 }

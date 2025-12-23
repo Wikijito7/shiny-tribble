@@ -1,5 +1,6 @@
 package es.wokis.data.repository.sensor
 
+import es.wokis.data.bo.response.AcknowledgeBO
 import es.wokis.data.bo.sensor.SensorBO
 import es.wokis.data.bo.user.UserBO
 import es.wokis.data.datasource.local.sensor.SensorLocalDataSource
@@ -9,7 +10,7 @@ import es.wokis.data.mapper.sensor.toDTO
 import es.wokis.data.mapper.sensor.toSimpleDTO
 
 interface SensorRepository {
-    suspend fun addData(user: UserBO, data: SensorBO)
+    suspend fun addData(user: UserBO, data: SensorBO): AcknowledgeBO
     suspend fun getLastSensorData(user: UserBO): SimpleSensorsDataDTO
     suspend fun getAllSensorData(user: UserBO): SensorsDataDTO
     suspend fun getHistoricSensorData(user: UserBO, time: String, interval: String): SensorsDataDTO
@@ -18,8 +19,8 @@ interface SensorRepository {
 class SensorRepositoryImpl(
     private val sensorLocalDataSource: SensorLocalDataSource
 ) : SensorRepository {
-    override suspend fun addData(user: UserBO, data: SensorBO) {
-        sensorLocalDataSource.addSensorData(user = user, sensor = data)
+    override suspend fun addData(user: UserBO, data: SensorBO): AcknowledgeBO {
+        return AcknowledgeBO(sensorLocalDataSource.addSensorData(user = user, sensor = data))
     }
 
     override suspend fun getLastSensorData(user: UserBO): SimpleSensorsDataDTO =

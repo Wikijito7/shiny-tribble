@@ -14,15 +14,15 @@ data class SimpleSensorDataDTO(
     @SerialName("name")
     val name: String,
     @SerialName("temp")
-    val temp: Float?,
+    val temp: Float? = null,
     @SerialName("hum")
-    val hum: Float?,
+    val hum: Float? = null,
     @SerialName("timestamp")
-    val timestamp: Long?,
+    val timestamp: Long? = null,
     @SerialName("error")
-    val error: String?,
+    val error: String? = null,
     @SerialName("battery")
-    val battery: SensorBatteryDTO?
+    val battery: SensorBatteryDTO? = null
 )
 
 @Serializable
@@ -36,9 +36,6 @@ data class SensorDTO(
     @SerialName("name")
     val name: String,
 
-    @SerialName("timestamp")
-    val timestamp: Long?,
-
     @SerialName("data")
     val data: List<SensorDataDTO>
 )
@@ -46,19 +43,19 @@ data class SensorDTO(
 @Serializable
 data class SensorDataDTO(
     @SerialName("temp")
-    val temp: Float?,
+    val temp: Float? = null,
 
     @SerialName("hum")
-    val hum: Float?,
+    val hum: Float? = null,
 
     @SerialName("timestamp")
     val timestamp: Long,
 
     @SerialName("error")
-    val error: String?,
+    val error: String? = null,
 
     @SerialName("battery")
-    val battery: SensorBatteryDTO?
+    val battery: SensorBatteryDTO? = null
 )
 
 @Serializable

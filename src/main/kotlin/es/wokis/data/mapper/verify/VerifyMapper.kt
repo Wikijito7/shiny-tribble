@@ -13,7 +13,7 @@ fun VerificationBO.toDBO() = VerificationDBO(
 )
 
 fun VerificationDBO.toBO() = VerificationBO(
-    id = id.toString(),
+    id = id?.toHexString(),
     email = email,
     verificationToken = verificationToken,
     timeStamp = Date(timeStamp),
