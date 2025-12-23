@@ -47,6 +47,7 @@ dependencies {
 
     // Mongodb
     implementation(libs.mongobd)
+    implementation(libs.mongobd.bson.kotlinx)
 
     // Koin
     implementation(libs.koin.ktor)

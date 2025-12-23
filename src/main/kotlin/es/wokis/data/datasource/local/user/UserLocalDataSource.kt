@@ -1,8 +1,9 @@
-package es.wokis.data.datasource.user
+package es.wokis.data.datasource.local.user
 
 import com.mongodb.client.model.Filters
 import com.mongodb.kotlin.client.coroutine.MongoCollection
 import es.wokis.data.bo.user.UserBO
+import es.wokis.data.constants.ServerConstants
 import es.wokis.data.constants.ServerConstants.EMPTY_TEXT
 import es.wokis.data.dbo.user.UserDBO
 import es.wokis.data.mapper.user.toBO
@@ -32,7 +33,7 @@ class UserLocalDataSourceImpl(private val userCollection: MongoCollection<UserDB
     }.toList()
 
     override suspend fun getUserById(id: String): UserBO? {
-        val filter = Filters.eq(UserDBO::id.name, ObjectId(id))
+        val filter = Filters.eq(ServerConstants.MONGO_DOCUMENT_ID, ObjectId(id))
         return userCollection.find(filter).firstOrNull()?.toBO()
     }
 
@@ -65,7 +66,7 @@ class UserLocalDataSourceImpl(private val userCollection: MongoCollection<UserDB
     }
 
     override suspend fun updateUser(user: UserBO): Boolean {
-        val filter = Filters.eq(UserDBO::id.name, ObjectId(user.id))
+        val filter = Filters.eq(ServerConstants.MONGO_DOCUMENT_ID, ObjectId(user.id))
         return userCollection.replaceOne(filter, user.toDBO()).wasAcknowledged()
     }
 }

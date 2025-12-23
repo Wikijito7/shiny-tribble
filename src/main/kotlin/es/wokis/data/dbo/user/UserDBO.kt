@@ -4,9 +4,11 @@ import es.wokis.data.constants.ServerConstants
 import es.wokis.data.constants.ServerConstants.DEFAULT_LANG
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import org.bson.types.ObjectId
 import java.util.Date
 
+@Serializable
 data class UserDBO(
     @SerialName("_id")
     @Contextual val id: ObjectId? = null,
@@ -19,5 +21,5 @@ data class UserDBO(
     val emailVerified: Boolean = false,
     val totpEncodedSecret: ByteArray? = null,
     val sessions: List<String> = emptyList(),
-    val recoverWords: List<String> = emptyList()
+    val recoverWords: List<String> = emptyList(),
 )

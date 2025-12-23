@@ -47,6 +47,7 @@ fun Routing.setUpAuthRouting() {
                 respondNotAuthorization()
 
             } catch (exc: Exception) {
+                println(exc.stackTraceToString())
                 call.respond(HttpStatusCode.InternalServerError)
             }
         }

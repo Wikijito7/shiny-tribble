@@ -13,7 +13,7 @@ fun RecoverBO.toDBO() = RecoverDBO(
 )
 
 fun RecoverDBO.toBO() = RecoverBO(
-    id = id.toString(),
+    id = id?.toHexString(),
     email = email,
     verificationToken = recoverToken,
     timeStamp = Date(timeStamp),

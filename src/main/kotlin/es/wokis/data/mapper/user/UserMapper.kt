@@ -60,7 +60,7 @@ fun UserBO.toDBO() = UserDBO(
 fun List<UserDBO>.toBO() = this.map { it.toBO() }
 
 fun UserDBO.toBO() = UserBO(
-    id = id.toString(),
+    id = id?.toHexString(),
     username = username,
     email = email,
     password = password,

@@ -1,8 +1,9 @@
-package es.wokis.data.datasource.recover
+package es.wokis.data.datasource.local.recover
 
 import com.mongodb.client.model.Filters
 import com.mongodb.kotlin.client.coroutine.MongoCollection
 import es.wokis.data.bo.recover.RecoverBO
+import es.wokis.data.constants.ServerConstants
 import es.wokis.data.dbo.recover.RecoverDBO
 import es.wokis.data.mapper.recover.toBO
 import es.wokis.data.mapper.recover.toDBO
@@ -34,7 +35,7 @@ class RecoverLocalDataSourceImpl(private val recoverCollection: MongoCollection<
     }
 
     override suspend fun removeRecover(id: String): Boolean = try {
-        val filter = Filters.eq(RecoverDBO::id.name, ObjectId(id))
+        val filter = Filters.eq(ServerConstants.MONGO_DOCUMENT_ID, ObjectId(id))
         recoverCollection.deleteOne(filter).wasAcknowledged()
 
     } catch (e: Throwable) {

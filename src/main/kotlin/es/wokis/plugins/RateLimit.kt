@@ -10,6 +10,10 @@ fun Application.configureRateLimit() {
             rateLimiter(limit = 120, refillPeriod = 60.seconds)
         }
 
+        register(RateLimitName("sensor")) {
+            rateLimiter(60, refillPeriod = 60.seconds)
+        }
+
         register(RateLimitName("auth")) {
             rateLimiter(10, refillPeriod = 60.seconds)
         }
